@@ -30,3 +30,31 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self,  key: str, fn: Callable = None) -> Union[
+            str, bytes, int, float]:
+        """
+         Reads data from Redis and reconverts it to its original python type
+        """
+        data = self._redis.get(key)
+        if fn:
+            return fn(data)
+        return data
+
+    def get_str(self, key: str) -> str:
+        """
+        converts data from redis into a python str variable
+        """
+        var = self._redis.get(key)
+        return var.decode("UTF-8")
+
+    def get_int(self, key: str) -> int:
+        """
+         converts data from redis into a python int variable
+        """
+        var = self._redis.get(key)
+        try:
+            var = int(var.decode("UTF-8"))
+        except Exception:
+            var = 0
+        return var
