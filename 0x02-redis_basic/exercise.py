@@ -18,13 +18,14 @@ def count_calls(method: Callable) -> Callable:
     key = method.__qualname__
 
     @wraps(method)
-    def  wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs):
         """
         lncreases count for the particular key on every call of that method
         """
         self._redis.incr(key)
-        return  method(self, *args, **kwargs)
+        return method(self, *args, **kwargs)
     return wrapper
+
 
 def call_history(method: Callable) -> Callable:
     """
@@ -46,6 +47,7 @@ def call_history(method: Callable) -> Callable:
 
         return output
     return wrapper
+
 
 def replay(fn: Callable) -> Callable:
     """Display the history of calls of a particular function"""
