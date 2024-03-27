@@ -80,10 +80,15 @@ class Cache:
     """
     store an instance of the Redis client
     """
-    def init(self) -> None:
+    def __init__(self) -> None:
+        """
+        init method for initialisation
+        """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Store method to store data to redis server
