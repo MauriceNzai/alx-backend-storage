@@ -5,23 +5,23 @@ provides some stats about Nginx logs stored in MongoDB
 """
 from pymongo import MongoClient
 
+METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
 def nginx_logs(mongo_collection, option=None):
     """
     returns stats about Nginx logs stored in MongoDB
     """
-    METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    items = {}
     if option:
         value = mongo_collection.count_documents({"method": {"$regex": option}})
         print(f"\tmethod {option}: {value}")
         return
 
-    result = mongo_collection.count_documents(items)
+    result = mongo_collection.count_documents({})
     print(f"{result} logs")
     print("Methods :")
     for method in  METHODS:
-        nginx_logs(nginx_collection, method)
+        value = mongo_collection.count_documents({"method": method})
+        print(f"\t{method}: {value}")
 
     status_check = mongo_collection.count_documents({"path": "/status"})
     print(f"{status_check} status check")
