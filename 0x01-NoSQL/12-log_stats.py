@@ -7,24 +7,20 @@ from pymongo import MongoClient
 
 METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-def nginx_logs(mongo_collection, option=None):
+def nginx_logs(mongo_collection):
     """
     returns stats about Nginx logs stored in MongoDB
     """
-    if option:
-        value = mongo_collection.count_documents({"method": {"$regex": option}})
-        print(f"\tmethod {option}: {value}")
-        return
-
-    result = mongo_collection.count_documents({})
-    print(f"{result} logs")
-    print("Methods :")
-    for method in  METHODS:
-        value = mongo_collection.count_documents({"method": method})
-        print(f"\t{method}: {value}")
-
-    status_check = mongo_collection.count_documents({"path": "/status"})
-    print(f"{status_check} status check")
+    print('{} logs'.format(nginx_collection.count_documents({})))
+    print('Methods:')
+    methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+    for method in methods:
+        req_count = len(list(nginx_collection.find({'method': method})))
+        print('\tmethod {}: {}'.format(method, req_count))
+    status_checks_count = len(list(
+        nginx_collection.find({'method': 'GET', 'path': '/status'})
+    ))
+    print('{} status check'.format(status_checks_count))
 
 
 if __name__ == "__main__":
