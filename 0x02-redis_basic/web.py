@@ -13,6 +13,7 @@ from typing import Dict
 
 cache: Dict[str, str] = {}
 
+
 def get_page(url: str) -> str:
     """
     Gets the url of a page to retrieve
