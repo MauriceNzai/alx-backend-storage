@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 It uses the requests module to obtain the HTML content
 of a particular URL and returns it.
